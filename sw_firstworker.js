@@ -2,6 +2,9 @@ const cacheVersion = 'V1';
 var CACHE_NAME = 'V1';
 var urlsToCache = [
     './',
+    './*.*',
+    './staff.html',
+    './staff.css',
     '/https://placekitten.com/225/175',
     '/https://placekitten.com/226/175',
     '/https://placekitten.com/227/175',
