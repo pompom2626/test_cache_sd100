@@ -1,16 +1,26 @@
-const cacheVersion = "v1";
-var CACHE_NAME = 'first-sw';
+const cacheVersion = 'V1';
+var CACHE_NAME = 'V1';
 var urlsToCache = [
     '/',
 
 ];
 
+//logging
+const log = msg => {
+    console.log(`[ServiceWorker ${cacheVersion}] ${msg}`);
+  }
+
+
 //install
 self.addEventListener('install', function (event) {
+    self.skipWaiting();
+    log('install');
+    console.log('install !!!');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(function (cache) {
                 console.log('Opened cache');
+                log('caching app shell');
                 return cache.addAll(urlsToCache);
             })
     );
@@ -18,12 +28,14 @@ self.addEventListener('install', function (event) {
 
 //Activate Event
 self.addEventListener("activate", e => {
+    log('activate');
+    console.log('activate !!!');
     e.waitUntil(
         caches.keys().then(cacheVersions => {
             return Promise.all(
-                cacheVersions.map(cacheName => {
-                    if (cacheName !== cacheVersion) {
-                        return caches.delete(cacheName);
+                cacheVersions.map(key => {
+                    if (key !== CACHE_NAME) {
+                        return caches.delete(key);
                     }
                 })
             );
@@ -31,8 +43,12 @@ self.addEventListener("activate", e => {
     );
 });
 
+
+
+
 //fetch
 self.addEventListener('fetch', function (event) {
+    log('fetch');
     event.respondWith(
         caches.match(event.request).then(function (response) {
 
@@ -53,7 +69,7 @@ self.addEventListener('fetch', function (event) {
                 }
 
                 var responseClone = httpRes.clone();
-                caches.open('first-sw').then(function (cache) {
+                caches.open(CACHE_NAME).then(function (cache) {
                     cache.put(event.request, responseClone);
                 });
 
@@ -62,3 +78,19 @@ self.addEventListener('fetch', function (event) {
         })
     );
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
