@@ -1,7 +1,7 @@
 const cacheVersion = 'V1';
 var CACHE_NAME = 'V1';
 var urlsToCache = [
-    '/',
+    './',
 
 ];
 
